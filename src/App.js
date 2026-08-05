@@ -313,7 +313,7 @@ export default function App() {
             <SR><h2 className="section-title">Dress Code</h2></SR>
             <SR delay={120}>
               <div className="dresscode-card">
-                <img src="/dresscode.jpg" alt="Dress Code" className="dc-illustration" onError={(e)=>{e.target.style.display="none"}}/>
+                <img src="/dresscode.jpg" alt="Dress Code" className="dc-illustration"/>
                 <div className="dresscode-cols">
                   <div className="dc-col">
                     <div className="dc-col-title">Xanımlar</div>
@@ -361,7 +361,20 @@ export default function App() {
                   <div className="nav-label-top">Naviqasiya seçin</div>
                   <div className="nav-btns">
                     <a href="https://www.google.com/maps/search/?api=1&query=40.399402,49.939136" target="_blank" rel="noreferrer" className="nav-btn"><span>🗺</span> Google Maps</a>
-                    <a href="bolt://ride?destination_latitude=40.399402&destination_longitude=49.939136&destination_name=A%C4%9F+Saray+%C5%9Eadl%C4%B1q+Saray%C4%B1" onClick={(e)=>{setTimeout(()=>{window.location.href='https://bolt.eu/az-az/'},500)}} target="_self" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
+                    <a href="#" onClick={(e)=>{
+                      e.preventDefault();
+                      const ua=navigator.userAgent;
+                      const isIOS=/iP(hone|ad|od)/i.test(ua);
+                      const isAndroid=/Android/i.test(ua);
+                      if(isAndroid){
+                        window.location.href='intent://ride?destination_latitude=40.399402&destination_longitude=49.939136&destination_name=A%C4%9F%20Saray%20%C5%9Eadl%C4%B1q%20Saray%C4%B1#Intent;scheme=bolt;package=ee.mtakso.client;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dee.mtakso.client;end';
+                      } else if(isIOS){
+                        window.location.href='bolt://ride?destination_latitude=40.399402&destination_longitude=49.939136&destination_name=A%C4%9F%20Saray';
+                        setTimeout(()=>{ window.location.href='https://apps.apple.com/az/app/bolt-request-a-ride/id675033630'; }, 1500);
+                      } else {
+                        window.open('https://www.google.com/maps/dir/?api=1&destination=40.399402,49.939136','_blank');
+                      }
+                    }} className="nav-btn"><span>⚡</span> Bolt</a>
                     <a href="https://yango.go.link/route?end-lat=40.399402&end-lon=49.939136&end-name=A%C4%9F+Saray+%C5%9Eadl%C4%B1q+Saray%C4%B1&adj_adgroup=widget&ref=wedding" target="_blank" rel="noreferrer" className="nav-btn"><span>🚖</span> Yango</a>
                     <a href="https://waze.com/ul?ll=40.399402,49.939136&navigate=yes" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
                   </div>
