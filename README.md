@@ -1,4 +1,4 @@
-# 💍 Zülfüqar & Aylin — Toy Dəvətnaməsi
+# 💍 Samir & Xanımana — Toy Dəvətnaməsi
 
 ## Vercel-ə deploy etmək üçün:
 
