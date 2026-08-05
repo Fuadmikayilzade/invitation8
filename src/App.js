@@ -229,7 +229,7 @@ export default function App() {
           {!videoPlaying && (
             <div className="video-cta-btn">
               <span className="vcta-line"/>
-              <span className="vcta-text">Ekrana toxunun</span>
+              <span className="vcta-text">Məktuba toxunun</span>
               <span className="vcta-line"/>
             </div>
           )}
