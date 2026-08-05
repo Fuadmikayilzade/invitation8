@@ -322,7 +322,7 @@ body {
 
 /* ── Dress Code ───────────────────────────────────────────────────────────────*/
 .dresscode-card { border:1px solid var(--border); padding:0 0 20px; background:var(--surface); backdrop-filter:blur(8px); text-align:center; overflow:hidden; }
-.dc-illustration { width:100%; display:block; height:auto; max-width:100%; }
+.dc-illustration { width:100%; display:block; object-fit:cover; }
 .dc-theme-line { font-family:var(--fd); font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
 .dresscode-desc { font-family:var(--fb); font-style:italic; font-size:15px; line-height:1.75; color:var(--brown-mid); margin-bottom:22px; }
 .dresscode-cols { display:flex; gap:0; margin-bottom:0; text-align:left; padding:18px 20px 4px; }
