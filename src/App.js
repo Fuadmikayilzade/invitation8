@@ -313,6 +313,7 @@ export default function App() {
             <SR><h2 className="section-title">Dress Code</h2></SR>
             <SR delay={120}>
               <div className="dresscode-card">
+                <img src="/dresscode.jpg" alt="Dress Code" className="dc-illustration"/>
                 <div className="dresscode-cols">
                   <div className="dc-col">
                     <div className="dc-col-title">Xanımlar</div>
@@ -360,7 +361,7 @@ export default function App() {
                   <div className="nav-label-top">Naviqasiya seçin</div>
                   <div className="nav-btns">
                     <a href="https://maps.app.goo.gl/7cKVfyirTi6B5FwU8" target="_blank" rel="noreferrer" className="nav-btn"><span>🗺</span> Google Maps</a>
-                    <a href="https://bolt.eu/az-az/ride/?destination=40.4195,49.9315" target="_blank" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
+                    <a href="bolt://ride?destination_latitude=40.4195&destination_longitude=49.9315&destination_name=A%C4%9F+Saray+%C5%9Eadl%C4%B1q+Saray%C4%B1" onClick={(e)=>{setTimeout(()=>{window.location.href='https://bolt.eu/az-az/'},500)}} target="_self" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
                     <a href="https://yango.go.link/route?end-lat=40.4195&end-lon=49.9315&end-name=A%C4%9F+Saray+%C5%9Eadl%C4%B1q+Saray%C4%B1&adj_adgroup=widget&ref=wedding" target="_blank" rel="noreferrer" className="nav-btn"><span>🚖</span> Yango</a>
                     <a href="https://www.waze.com/az/live-map/directions/ag-saray-bekir-cobanzade-baki?to=place.w.32702868.327290824.10022410" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
                   </div>
