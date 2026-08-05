@@ -148,9 +148,12 @@ export default function App() {
   const [musicOn, setMusicOn] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
+  const playingRef = useRef(false);  // guard against double-fire
+  const endedRef = useRef(false);    // guard against double transition
 
-  // Video ends → white flash → invitation + music
-  const handleVideoEnded = useCallback(() => {
+  const goToInvitation = useCallback(() => {
+    if (endedRef.current) return;
+    endedRef.current = true;
     setPhase('transition');
     if (audioRef.current) {
       audioRef.current.currentTime = 0;
@@ -161,13 +164,28 @@ export default function App() {
     setTimeout(() => setPhase('invitation'), 1400);
   }, []);
 
+  // Video ends → white flash → invitation + music
+  const handleVideoEnded = useCallback(() => {
+    goToInvitation();
+  }, [goToInvitation]);
+
+  // Fallback: onTimeUpdate — catches cases where onEnded doesn't fire (Android)
+  const handleTimeUpdate = useCallback(() => {
+    const v = videoRef.current;
+    if (!v || endedRef.current) return;
+    if (v.duration && v.currentTime >= v.duration - 0.3) {
+      goToInvitation();
+    }
+  }, [goToInvitation]);
+
   // Tap/click on video screen to play
-  const handleCtaClick = (e) => {
-    if (videoPlaying) return;
+  const handleCtaClick = useCallback(() => {
+    if (playingRef.current) return;
     const v = videoRef.current;
     if (!v) return;
+    playingRef.current = true;
 
-    // iOS Safari: must interact with audio element directly on user gesture
+    // iOS: interact with audio on user gesture
     if (audioRef.current) {
       audioRef.current.load();
     }
@@ -179,9 +197,9 @@ export default function App() {
         v.play().then(() => {
           v.muted = false;
           setVideoPlaying(true);
-        }).catch(() => {});
+        }).catch(() => { playingRef.current = false; });
       });
-  };
+  }, []);
 
   const toggleTheme = useCallback(() => {
     setImgFading(true);
@@ -214,7 +232,6 @@ export default function App() {
       {phase==='video' && (
         <div className="video-screen"
           onClick={!videoPlaying ? handleCtaClick : undefined}
-          onTouchStart={!videoPlaying ? handleCtaClick : undefined}
           style={{cursor: videoPlaying ? 'default' : 'pointer'}}>
           <video
             ref={videoRef}
@@ -224,12 +241,13 @@ export default function App() {
             webkit-playsinline="true"
             preload="auto"
             onEnded={handleVideoEnded}
+            onTimeUpdate={handleTimeUpdate}
           />
           {/* CTA overlay — shows until video starts */}
           {!videoPlaying && (
             <div className="video-cta-btn">
               <span className="vcta-line"/>
-              <span className="vcta-text">Məktuba toxunun</span>
+              <span className="vcta-text">Ekrana toxunun</span>
               <span className="vcta-line"/>
             </div>
           )}
