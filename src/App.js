@@ -153,7 +153,10 @@ export default function App() {
   const handleVideoEnded = useCallback(() => {
     setPhase('transition');
     if (audioRef.current) {
-      audioRef.current.play().then(() => setMusicOn(true)).catch(() => {});
+      audioRef.current.currentTime = 0;
+      const p = audioRef.current.play();
+      if (p !== undefined) p.then(() => setMusicOn(true)).catch(() => {});
+      else setMusicOn(true);
     }
     setTimeout(() => setPhase('invitation'), 1400);
   }, []);
@@ -163,17 +166,12 @@ export default function App() {
     if (videoPlaying) return;
     const v = videoRef.current;
     if (!v) return;
-    // Unlock audio context on this user gesture
+
+    // iOS Safari: must interact with audio element directly on user gesture
     if (audioRef.current) {
       audioRef.current.load();
-      // silent play+pause to unlock — browser will allow real play later
-      audioRef.current.muted = true;
-      audioRef.current.play().then(() => {
-        audioRef.current.pause();
-        audioRef.current.muted = false;
-        audioRef.current.currentTime = 0;
-      }).catch(() => {});
     }
+
     v.play()
       .then(() => setVideoPlaying(true))
       .catch(() => {
@@ -202,7 +200,7 @@ export default function App() {
         {[...Array(14)].map((_,i)=><div key={i} className={`petal petal-${i}`}/>)}
       </div>
 
-      <audio ref={audioRef} loop>
+      <audio ref={audioRef} loop preload="auto">
         <source src="/music.mp3" type="audio/mpeg"/>
       </audio>
 
@@ -214,7 +212,10 @@ export default function App() {
 
       {/* ── VIDEO SCREEN ── */}
       {phase==='video' && (
-        <div className="video-screen" onClick={!videoPlaying ? handleCtaClick : undefined} style={{cursor: videoPlaying ? 'default' : 'pointer'}}>
+        <div className="video-screen"
+          onClick={!videoPlaying ? handleCtaClick : undefined}
+          onTouchStart={!videoPlaying ? handleCtaClick : undefined}
+          style={{cursor: videoPlaying ? 'default' : 'pointer'}}>
           <video
             ref={videoRef}
             className="video-bg"
@@ -228,7 +229,7 @@ export default function App() {
           {!videoPlaying && (
             <div className="video-cta-btn">
               <span className="vcta-line"/>
-              <span className="vcta-text">Məktuba toxunun</span>
+              <span className="vcta-text">Ekrana toxunun</span>
               <span className="vcta-line"/>
             </div>
           )}
