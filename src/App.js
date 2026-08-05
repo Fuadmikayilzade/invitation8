@@ -102,7 +102,7 @@ function SR({ children, className='', delay=0 }) {
 
 // ── Countdown ─────────────────────────────────────────────────────────────────
 function CountdownTimer() {
-  const wedding = new Date('2026-05-29T18:00:00');
+  const wedding = new Date('2026-08-21T18:00:00');
   const [t, setT] = useState({});
   useEffect(() => {
     const calc = () => {
@@ -137,43 +137,7 @@ function Ornament() {
   );
 }
 
-function RSVPSection() {
-  const [name,setName]=useState('');
-  const [guests,setGuests]=useState('1');
-  const [note,setNote]=useState('');
-  const [sent,setSent]=useState(false);
-  const handleSend = () => {
-    if(!name.trim()) return;
-    const msg=`🌿 Toy Dəvətnaməsi · İştirak Blankı\n\n👤 Ad Soyad: ${name}\n👥 Qonaq sayı: ${guests}\n💬 Qeyd: ${note||'—'}\n\n📅 Zülfüqar & Aylin · 29 May 2026`;
-    window.open(`https://wa.me/994104195344?text=${encodeURIComponent(msg)}`,'_blank');
-    setSent(true);
-  };
-  if(sent) return (
-    <div className="thank-card">
-      <div className="thank-flourish">✦</div>
-      <h3 className="thank-title">Təşəkkür edirik</h3>
-      <p className="thank-text">İştirakınız bizə böyük sevinc gətirəcək.<br/>Sizi 29 May günündə görmək arzusundayıq.</p>
-      <div className="thank-sig">Zülfüqar & Aylin</div>
-    </div>
-  );
-  return (
-    <div className="rsvp-form">
-      <p className="rsvp-intro">İştirakınızı zəhmət olmasa təsdiqləyin</p>
-      <div className="field-wrap"><label className="field-label">Ad, Soyad</label>
-        <input className="field-input" value={name} onChange={e=>setName(e.target.value)} placeholder="Adınızı daxil edin"/>
-      </div>
-      <div className="field-wrap"><label className="field-label">Qonaq sayı</label>
-        <select className="field-input" value={guests} onChange={e=>setGuests(e.target.value)}>
-          {[1,2,3,4,5].map(n=><option key={n} value={n}>{n} nəfər</option>)}
-        </select>
-      </div>
-      <div className="field-wrap"><label className="field-label">Qeyd <span className="opt-lbl">(ixtiyari)</span></label>
-        <textarea className="field-input field-textarea" value={note} onChange={e=>setNote(e.target.value)} placeholder="Xüsusi istəyiniz..." rows={3}/>
-      </div>
-      <button className="rsvp-btn" onClick={handleSend}>Göndər <span>↗</span></button>
-    </div>
-  );
-}
+
 
 // ── MAIN ──────────────────────────────────────────────────────────────────────
 export default function App() {
@@ -293,12 +257,12 @@ export default function App() {
               <div className="hnc-body">
                 <div className="hnc-eyebrow">Toy Dəvətnaməsi</div>
                 <h1 className="hnc-names">
-                  <span>Zülfüqar</span>
+                  <span>Samir</span>
                   <span className="hnc-amp">&</span>
-                  <span>Aylin</span>
+                  <span>Xanımana</span>
                 </h1>
-                <div className="hnc-date">29 May 2026 · Cümə</div>
-                <div className="hnc-venue">Ay işığı Şadlıq Sarayı</div>
+                <div className="hnc-date">21 Avqust 2026 · Cümə</div>
+                <div className="hnc-venue">Ağ saray Şadlıq evi</div>
               </div>
             </div>
           </section>
@@ -311,15 +275,6 @@ export default function App() {
 
           <Ornament/>
 
-          <section className="section couple-section">
-            <SR><h2 className="section-title">Bizim Anımız</h2></SR>
-            <SR delay={100}><ScratchCard src="/img3.jpg" alt="Cütlük"/></SR>
-            <SR delay={220}>
-              <p className="couple-quote">"Hər şeyi birlikdə yaşamaq üçün yaranmışıq —<br/>bu gün onun başlanğıcıdır."</p>
-            </SR>
-          </section>
-
-          <Ornament/>
 
           <section className="section">
             <SR><h2 className="section-title">Dress Code</h2></SR>
@@ -355,12 +310,6 @@ export default function App() {
 
           <Ornament/>
 
-          <section className="section">
-            <SR><h2 className="section-title">İştirak Blankı</h2></SR>
-            <SR delay={120}><RSVPSection/></SR>
-          </section>
-
-          <Ornament/>
 
           <section className="section">
             <SR><h2 className="section-title">Mərasim Albomunuz</h2></SR>
@@ -386,14 +335,14 @@ export default function App() {
               <div className="venue-card">
                 <div className="venue-img-wrap"><img src="/img5.jpg" alt="Şadlıq Sarayı" className="venue-img"/></div>
                 <div className="venue-info">
-                  <div className="venue-name">Ay işığı Şadlıq Sarayı</div>
-                  <div className="venue-time">29 May 2026 · Saat 18:00</div>
+                  <div className="venue-name">Ağ saray Şadlıq evi</div>
+                  <div className="venue-time">21 Avqust 2026 · Saat 18:00</div>
                   <div className="nav-label-top">Naviqasiya seçin</div>
                   <div className="nav-btns">
-                    <a href="https://maps.google.com/?q=Ayışığı+Şadlıq+Sarayı+Bakı" target="_blank" rel="noreferrer" className="nav-btn"><span>🗺</span> Google Maps</a>
+                    <a href="https://maps.app.goo.gl/7cKVfyirTi6B5FwU8" target="_blank" rel="noreferrer" className="nav-btn"><span>🗺</span> Google Maps</a>
                     <a href="https://bolt.eu/" target="_blank" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
                     <a href="https://yango.com/" target="_blank" rel="noreferrer" className="nav-btn"><span>🚖</span> Yango</a>
-                    <a href="https://waze.com/ul?q=Ayışığı+Şadlıq+Sarayı+Bakı" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
+                    <a href="https://www.waze.com/en/live-map/directions/ag-saray-bekir-cobanzade-baki?place=w.32702868.327290824.10022410" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
                   </div>
                 </div>
               </div>
@@ -402,8 +351,8 @@ export default function App() {
 
           <SR className="inv-footer">
             <div className="footer-flourish">✦ &nbsp; ✦ &nbsp; ✦</div>
-            <div className="footer-names">Zülfüqar & Aylin</div>
-            <div className="footer-date">29 · V · 2026</div>
+            <div className="footer-names">Samir & Xanımana</div>
+            <div className="footer-date">21 · VIII · 2026</div>
             <div className="footer-verse">"Sevgi hər şeyi gözəlləşdirir"</div>
           </SR>
 
