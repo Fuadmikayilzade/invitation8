@@ -158,24 +158,31 @@ export default function App() {
     setTimeout(() => setPhase('invitation'), 1400);
   }, []);
 
-  // Tap/click directly on the button (guaranteed user gesture)
+  // Tap/click on video screen to play
   const handleCtaClick = (e) => {
-    e.stopPropagation();
     if (videoPlaying) return;
     const v = videoRef.current;
     if (!v) return;
-    const tryPlay = () => {
-      v.play()
-        .then(() => setVideoPlaying(true))
-        .catch(() => {
-          v.muted = true;
-          v.play().then(() => {
-            v.muted = false;
-            setVideoPlaying(true);
-          }).catch(() => {});
-        });
-    };
-    tryPlay();
+    // Unlock audio context on this user gesture
+    if (audioRef.current) {
+      audioRef.current.load();
+      // silent play+pause to unlock — browser will allow real play later
+      audioRef.current.muted = true;
+      audioRef.current.play().then(() => {
+        audioRef.current.pause();
+        audioRef.current.muted = false;
+        audioRef.current.currentTime = 0;
+      }).catch(() => {});
+    }
+    v.play()
+      .then(() => setVideoPlaying(true))
+      .catch(() => {
+        v.muted = true;
+        v.play().then(() => {
+          v.muted = false;
+          setVideoPlaying(true);
+        }).catch(() => {});
+      });
   };
 
   const toggleTheme = useCallback(() => {
@@ -207,7 +214,7 @@ export default function App() {
 
       {/* ── VIDEO SCREEN ── */}
       {phase==='video' && (
-        <div className="video-screen">
+        <div className="video-screen" onClick={!videoPlaying ? handleCtaClick : undefined} style={{cursor: videoPlaying ? 'default' : 'pointer'}}>
           <video
             ref={videoRef}
             className="video-bg"
@@ -217,13 +224,13 @@ export default function App() {
             preload="auto"
             onEnded={handleVideoEnded}
           />
-          {/* CTA overlay — tap THIS button to play */}
+          {/* CTA overlay — shows until video starts */}
           {!videoPlaying && (
-            <button className="video-cta-btn" onClick={handleCtaClick}>
+            <div className="video-cta-btn">
               <span className="vcta-line"/>
               <span className="vcta-text">Məktuba toxunun</span>
               <span className="vcta-line"/>
-            </button>
+            </div>
           )}
         </div>
       )}
@@ -249,6 +256,13 @@ export default function App() {
                 className={`hero-img ${imgFading?'img-fading':''} ${isDark?'img-hide':'img-show'}`}/>
               <img src="/img2.png" alt="Gecə"
                 className={`hero-img hero-abs ${imgFading?'img-fading':''} ${isDark?'img-show':'img-hide'}`}/>
+              {/* Scroll indicator — overlaid at bottom of full-screen image */}
+              <div className="scroll-indicator" aria-hidden>
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 11 L16 21 L26 11" stroke="#000000" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M6 17 L16 27 L26 17" stroke="#000000" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.45"/>
+                </svg>
+              </div>
             </div>
 
             {/* Names BELOW image — cloud gradient blends from image into cream */}
@@ -280,30 +294,17 @@ export default function App() {
             <SR><h2 className="section-title">Dress Code</h2></SR>
             <SR delay={120}>
               <div className="dresscode-card">
-                <div className="dc-theme-line">Elegant · Classic · Refined</div>
-                <p className="dresscode-desc">Bu xüsusi gecədə elegantlıq hər detalda hiss olunmalıdır. Zəhmət olmasa geyim seçiminizdə aşağıdakılara riayət edin.</p>
                 <div className="dresscode-cols">
                   <div className="dc-col">
-                    <div className="dc-swatch dc-ladies"/>
                     <div className="dc-col-title">Xanımlar</div>
-                    <div className="dc-col-desc">Axşam köynəyi · Uzun geyim · Klassik elegantlıq</div>
-                    <div className="dc-dots">
-                      {['#e8d5c4','#c9b99a','#d4c4b0','#f5f0ea','#a08060'].map(c=><span key={c} className="dc-dot" style={{background:c}}/>)}
-                    </div>
-                    <div className="dc-note-red">⚠ Ağ rəngdən çəkinin</div>
+                    <div className="dc-col-desc">Zərif axşam geyimi · Elegant libas · Klassik stil</div>
                   </div>
                   <div className="dc-div"/>
                   <div className="dc-col">
-                    <div className="dc-swatch dc-gents"/>
                     <div className="dc-col-title">Cənablar</div>
-                    <div className="dc-col-desc">Smokinq · Klassik kostyum · Qaravat qalstuk</div>
-                    <div className="dc-dots">
-                      {['#1a1a2e','#2c3e50','#3d3d3d','#8b7355','#4a3728'].map(c=><span key={c} className="dc-dot" style={{background:c}}/>)}
-                    </div>
-                    <div className="dc-note-gold">✦ Rəsmi görünüş tələb olunur</div>
+                    <div className="dc-col-desc">Klassik kostyum · Smokinq · Rəsmi geyim</div>
                   </div>
                 </div>
-                <div className="dc-foot">✨ May bahçəsinin ruhuna uyğun pastel, bej və tünd ton kombinasiyaları tövsiyə olunur</div>
               </div>
             </SR>
           </section>
@@ -340,9 +341,9 @@ export default function App() {
                   <div className="nav-label-top">Naviqasiya seçin</div>
                   <div className="nav-btns">
                     <a href="https://maps.app.goo.gl/7cKVfyirTi6B5FwU8" target="_blank" rel="noreferrer" className="nav-btn"><span>🗺</span> Google Maps</a>
-                    <a href="https://bolt.eu/" target="_blank" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
-                    <a href="https://yango.com/" target="_blank" rel="noreferrer" className="nav-btn"><span>🚖</span> Yango</a>
-                    <a href="https://www.waze.com/en/live-map/directions/ag-saray-bekir-cobanzade-baki?place=w.32702868.327290824.10022410" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
+                    <a href="https://bolt.eu/az-az/ride/?destination=40.4195,49.9315" target="_blank" rel="noreferrer" className="nav-btn"><span>⚡</span> Bolt</a>
+                    <a href="https://yango.go.link/route?end-lat=40.4195&end-lon=49.9315&end-name=A%C4%9F+Saray+%C5%9Eadl%C4%B1q+Saray%C4%B1&adj_adgroup=widget&ref=wedding" target="_blank" rel="noreferrer" className="nav-btn"><span>🚖</span> Yango</a>
+                    <a href="https://www.waze.com/az/live-map/directions/ag-saray-bekir-cobanzade-baki?to=place.w.32702868.327290824.10022410" target="_blank" rel="noreferrer" className="nav-btn"><span>🔵</span> Waze</a>
                   </div>
                 </div>
               </div>
