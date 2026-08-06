@@ -381,7 +381,7 @@ export default function App() {
                       const isIOS=/iP(hone|ad|od)/i.test(ua);
                       const isAndroid=/Android/i.test(ua);
                       if(isAndroid){
-                        window.location.href='intent://route?end-lat=40.399402&end-lon=49.939136&end-name=A%C4%9F%20Saray%20%C5%9Eadl%C4%B1q%20Saray%C4%B1#Intent;scheme=yandexnavi;package=ru.yandex.yango;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dru.yandex.yango;end';
+                        window.location.href='intent://build_route_on_map?lat_to=40.399402&lon_to=49.939136&rtext=~40.399402,49.939136&rtt=taxi#Intent;scheme=yandexnavi;package=com.yandex.yango;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.yandex.yango;end';
                       } else if(isIOS){
                         window.location.href='yandexnavi://build_route_on_map?lat_to=40.399402&lon_to=49.939136';
                         setTimeout(()=>{ window.location.href='https://apps.apple.com/az/app/yango/id1250409168'; }, 1500);
